@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, Roboto, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", Inter, ui-sans-serif, system-ui, sans-serif;
+  --background: 40 30% 98%;
+  --foreground: 222 30% 12%;
+  --card: 0 0% 100%;
+  --muted: 40 18% 94%;
+  --muted-foreground: 222 10% 40%;
+  --border: 35 14% 86%;
+  --primary: 168 72% 28%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 14 88% 52%;
+  --accent-foreground: 0 0% 100%;
+  --success: 152 60% 32%;
+  --warning: 32 92% 40%;
+  --danger: 356 72% 48%;
+  --ring: 168 72% 34%;
+}
+.dark {
+  --background: 222 28% 7%;
+  --foreground: 40 20% 94%;
+  --card: 222 24% 10%;
+  --muted: 222 20% 15%;
+  --muted-foreground: 222 10% 66%;
+  --border: 222 16% 20%;
+  --primary: 166 62% 46%;
+  --primary-foreground: 222 30% 8%;
+  --accent: 14 92% 64%;
+  --accent-foreground: 222 30% 8%;
+  --success: 152 56% 50%;
+  --warning: 38 92% 58%;
+  --danger: 356 80% 64%;
+  --ring: 166 62% 50%;
+}
+
+* { @apply border-border; }
+html { scroll-behavior: smooth; }
+body { @apply bg-background text-foreground antialiased; font-family: var(--font-sans); }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+.grid-bg {
+  background-image: linear-gradient(hsl(var(--border) / .55) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .55) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
+}

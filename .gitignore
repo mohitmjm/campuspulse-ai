@@ -1,0 +1,16 @@
+node_modules
+.next
+*.db
+*.db-journal
+.env
+.env.local
+test-results
+playwright-report
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# local artifacts
+test-results/
+.next/
+*.db
+docs/Growth-Plan.html

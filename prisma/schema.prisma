@@ -1,0 +1,82 @@
+// CampusPulse AI data model.
+// Every table carries `isDemo` so simulated records are always separable from real ones.
+// Local demo: SQLite. Production: run `npm run use:postgres` to switch the provider.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Ambassador {
+  id            String         @id @default(cuid())
+  name          String
+  email         String
+  emailNorm     String
+  college       String
+  code          String         @unique
+  // Growth Test 2: "leaderboard" (tracked link + public recognition) vs "control" (plain sharing)
+  cohort        String         @default("leaderboard")
+  isDemo        Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  registrations Registration[]
+
+  @@unique([emailNorm, isDemo])
+}
+
+model Registration {
+  id             String      @id @default(cuid())
+  confirmationId String      @unique
+  name           String
+  email          String
+  emailNorm      String
+  phone          String?
+  college        String
+  branch         String
+  gradYear       Int
+  experience     String?
+  goal           String?
+  channel        String // whatsapp | club | referral | social | direct
+  messageVariant String? // Growth Test 1: placement | generic
+  formVariant    String? // Growth Test 3: short | long
+  referralCode   String?
+  ambassadorId   String?
+  ambassador     Ambassador? @relation(fields: [ambassadorId], references: [id], onDelete: SetNull)
+  isDemo         Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+
+  @@unique([emailNorm, isDemo])
+  @@index([isDemo, createdAt])
+}
+
+// Anonymous funnel events (no PII). Used for real denominators in conversion metrics.
+model Event {
+  id             String   @id @default(cuid())
+  type           String // page_view | form_start | form_submit | share_click
+  sessionId      String
+  channel        String?
+  messageVariant String?
+  formVariant    String?
+  referralCode   String?
+  isDemo         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([isDemo, type])
+}
+
+model Expense {
+  id        String   @id @default(cuid())
+  category  String
+  amount    Int // INR
+  note      String?
+  isDemo    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}
