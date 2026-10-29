@@ -5,7 +5,7 @@
   "description": "CampusPulse AI — the student growth & referral engine for the 'Build Your First AI Project in 60 Minutes' workshop campaign (simulation).",
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "prisma generate && next build",
+    "build": "node scripts/prepare-db.mjs && prisma generate && next build",
     "start": "next start -p 3000",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
