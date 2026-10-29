@@ -14,9 +14,12 @@ export function DemoControls({ active }: { active: string | null }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   const [, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   async function run(body: object, id: string) {
     setBusy(id);
-    await fetch("/api/demo", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).catch(() => {});
+    setError(null);
+    const res = await fetch("/api/demo", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).catch(() => null);
+    if (!res?.ok) setError(`Couldn't ${id === "reset" ? "reset the demo" : "load the scenario"} (${res ? `HTTP ${res.status}` : "network error"}). Please try again.`);
     start(() => router.refresh());
     setBusy(null);
   }
@@ -31,6 +34,7 @@ export function DemoControls({ active }: { active: string | null }) {
       <Button size="sm" variant="ghost" disabled={!!busy} onClick={() => run({ action: "reset" }, "reset")} data-testid="demo-reset">
         {busy === "reset" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />} Reset demo
       </Button>
+      {error && <p role="alert" className="w-full text-xs font-medium text-danger">{error}</p>}
     </div>
   );
 }

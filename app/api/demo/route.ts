@@ -9,6 +9,9 @@ const schema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("reset") }),
 ]);
 
+// Loading a scenario writes ~2k rows; allow more than the default serverless timeout.
+export const maxDuration = 60;
+
 // Only ever touches isDemo=true rows. Real registrations cannot be modified from here.
 export async function POST(req: Request) {
   if (!rateLimit(`demo:${clientKey(req)}`, 10, 60_000)) return NextResponse.json({ error: "Slow down" }, { status: 429 });
